@@ -1,5 +1,4 @@
 local M = {}
-local Path = require("plenary.path")
 local notify = require("curl.notifications")
 
 ---comment
@@ -16,10 +15,11 @@ local function get_custom_dir(global)
 end
 
 local curl_cache_dir = function(custom_dir)
-	local cache_dir = Path:new(vim.fn.stdpath("data")) / "curl_cache" ---@type Path
+  local cache_dir = vim.fs.joinpath(vim.fn.stdpath("data"), "curl_cache")
+
 
 	if custom_dir then
-		cache_dir = cache_dir / custom_dir ---@type Path
+    cache_dir = vim.fs.joinpath(cache_dir, custom_dir)
 	end
 
 	if vim.fn.mkdir(cache_dir:absolute(), "p") ~= 1 then
@@ -36,7 +36,7 @@ M.load_custom_command_file = function(filename, global)
 	local cache_dir = curl_cache_dir(custom_dir)
 
 	local curl_filename = filename .. ".curl"
-	local custom_cache_dir = cache_dir / curl_filename ---@type Path
+  local custom_cache_dir = vim.fs.joinpath(cache_dir, curl_filename)
 	return custom_cache_dir:absolute()
 end
 
@@ -44,7 +44,7 @@ end
 M.load_global_command_file = function()
 	local cache_dir = curl_cache_dir()
 
-	local global_cache_file = cache_dir / "global.curl" ---@type Path
+	local global_cache_file = vim.fs.joinpath(cache_dir, "global.curl")
 	return global_cache_file:absolute()
 end
 
@@ -56,14 +56,14 @@ M.load_command_file = function()
 	local unique_id = vim.fn.fnamemodify(workspace_path, ":t") .. "_" .. vim.fn.sha256(workspace_path):sub(1, 8) ---@type string
 	local new_file_name = unique_id .. ".curl"
 
-	local old_cache_file = cache_dir / vim.fn.sha256(workspace_path) ---@type Path
-	local new_cache_file = cache_dir / new_file_name ---@type Path
+	local old_cache_file = vim.fs.joinpath(cache_dir, vim.fn.sha256(workspace_path))
+	local new_cache_file = vim.fs.joinpath(cache_dir, new_file_name)
 
 	if old_cache_file:exists() then
 		if not new_cache_file:exists() then
 			old_cache_file:rename({ new_name = new_cache_file:absolute() })
 		else
-			local archive_file = cache_dir / (vim.fn.sha256(workspace_path) .. ".archive") ---@type Path
+			local archive_file = vim.fs.joinpath(cache_dir, vim.fn.sha256(workspace_path), ".archive")
 			old_cache_file:rename({ new_name = archive_file:absolute() })
 		end
 	end
