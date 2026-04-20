@@ -1,6 +1,6 @@
 local M = {}
 
-local Job = require("plenary.job")
+local Job = require("curl.job")
 local notify = require("curl.notifications")
 
 ---comment Run jq through plenary
