@@ -98,15 +98,17 @@ end
 ---@param curl_command string parsed curl_command from *.curl files
 ---@return string replaced curl_command on windows OR origin curl_command on *nix
 M.replace_env_var = function (curl_command)
-  if vim.fn.has("win32") then
-    local pattern = "(%$%w+)"
-    local matches = string.gmatch(curl_command, pattern)
-    for m in matches do
-      local word = m:sub(2, #m)
-      local val = vim.env[word]
-      if val ~= nil then
-        curl_command = string.gsub(curl_command, m, val)
-      end
+  if vim.fn.has("win32") == 0 then
+    return curl_command
+  end
+
+  local pattern = "(%$%w+)"
+  local matches = string.gmatch(curl_command, pattern)
+  for m in matches do
+    local word = m:sub(2, #m)
+    local val = vim.env[word]
+    if val ~= nil then
+      curl_command = string.gsub(curl_command, m, val)
     end
   end
   return curl_command
