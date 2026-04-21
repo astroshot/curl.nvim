@@ -17,7 +17,6 @@ end
 local curl_cache_dir = function(custom_dir)
   local cache_dir = vim.fs.joinpath(vim.fn.stdpath("data"), "curl_cache")
 
-
 	if custom_dir then
     cache_dir = vim.fs.joinpath(cache_dir, custom_dir)
 	end
@@ -76,7 +75,7 @@ end
 M.get_collections = function(global)
 	local collection_dir = curl_cache_dir(get_custom_dir(global)):absolute()
 
-	local scan = require("plenary.scandir")
+	local scan = require("curl.scandir")
 
 	local filepaths = scan.scan_dir(collection_dir, { depth = 1 }) ---@type string[]
 

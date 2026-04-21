@@ -1,0 +1,36 @@
+{
+  "diagnostics": {
+    "enable": true,
+    "disable": [],
+    "enables": [],
+    "globals": [
+      "vim",
+      "pcall"
+    ],
+    "globalsRegex": [],
+    "severity": {},
+    "diagnosticInterval": 500
+  },
+  "runtime": {
+    "version": "LuaJIT",
+    "requirePattern": [
+      "lua/?/init.lua",
+      "lua/?.lua",
+      "?/lua/?/init.lua",
+      "?/lua/?.lua"
+    ]
+  },
+  "workspace": {
+    "encoding": "utf-8",
+    "library": [
+      "$VIMRUNTIME",
+      "$HOME/.local/share/nvim/lazy",
+      "$HOME/.local/share/nvim/site/pack/core/opt",
+      "$APPDATA\\Local\\nvim",
+      "$APPDATA\\Local\\nvim-data\\site\\pack\\core\\opt"
+    ],
+    "ignoreGlobs": ["**/*_spec.lua"],
+    "workspaceRoots": ["./"]
+  }
+}
+
