@@ -89,7 +89,7 @@ local format_command_for_curl = function(lines)
   return cleaned_lines
 end
 
-local find_backward = function(current_pos, lines)
+local function find_backward(current_pos, lines)
   local next_pos = current_pos - 1
 
   if current_pos <= 1 then
@@ -108,7 +108,7 @@ local find_backward = function(current_pos, lines)
   return find_backward(next_pos, lines)
 end
 
-local find_forwards = function(current_pos, lines)
+local function find_forwards(current_pos, lines)
   local next_pos = current_pos + 1
 
   if current_pos >= #lines then
@@ -150,7 +150,7 @@ M.parse_curl_command = function(cursor_pos, lines)
     return ""
   end
 
-  table.insert(selection, "-sSL")
+  table.insert(selection, "-s -S -L")
 
   ---@for _ int, flag string in ipairs
   for _, flag in ipairs(config.get("default_flags")) do
