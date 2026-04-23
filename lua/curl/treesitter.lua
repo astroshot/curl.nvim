@@ -18,7 +18,7 @@ M.add_treesitter_highlighting = function()
     ((word) @url (#match? @url "^https?://"))
 
     ;; Highlight variables
-    ;; FIXME: will have many false-positives but idk how to do "\v---.{-}\=.+$" 
+    ;; FIXME: will have many false-positives but idk how to do "\v---.{-}\=.+$"
     ((command) @custom_var (#match? @custom_var "^---.+$"))
     ]]
   )

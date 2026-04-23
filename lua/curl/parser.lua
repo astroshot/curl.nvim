@@ -8,7 +8,9 @@ local highlight_curl_command = function(start_pos, end_pos)
   for i = start_pos - 1, end_pos - 1 do -- Lua is 1-indexed, but nvim_buf_add_highlight is 0-indexed
     -- nvim_buf_add_highlight is deprecated, use vim.hl.range instead
     -- vim.api.nvim_buf_add_highlight(0, ns_id, "CurlCommandHighlight", i, 0, -1)
-    vim.hl.range(0, ns_id, "CurlCommandHighlight", {i, 0}, {i, -1}, {})
+    local line = vim.fn.getline(i)
+    local max_col = #line
+    vim.hl.range(0, ns_id, "CurlCommandHighlight", { i, 0 }, { i, max_col }, { inclusive = true })
   end
 
   vim.defer_fn(function()
