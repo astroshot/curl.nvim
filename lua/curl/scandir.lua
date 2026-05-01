@@ -1,4 +1,4 @@
-local uv = vim.loop
+local uv = vim.uv or vim.loop
 
 local islist = vim.islist or vim.tbl_islist
 
@@ -15,8 +15,6 @@ local flatten = function(t)
     end
   end
 end
-
-local islist = vim.islist or vim.tbl_islist
 
 local if_nil = function(val, was_nil, was_not_nil)
   if val == nil then
@@ -191,7 +189,7 @@ m.scan_dir = function(path, opts)
 
   for i = #base_paths, 1, -1 do
     if uv.fs_access(base_paths[i], "X") == false then
-      if not F.if_nil(opts.silent, false, opts.silent) then
+      if not if_nil(opts.silent, false, opts.silent) then
         print(string.format("%s is not accessible by the current user!", base_paths[i]))
       end
       table.remove(base_paths, i)
@@ -248,7 +246,7 @@ m.scan_dir_async = function(path, opts)
   -- Maybe obers async pr can take me out of callback hell
   for i = #base_paths, 1, -1 do
     if uv.fs_access(base_paths[i], "X") == false then
-      if not F.if_nil(opts.silent, false, opts.silent) then
+      if not if_nil(opts.silent, false, opts.silent) then
         print(string.format("%s is not accessible by the current user!", base_paths[i]))
       end
       table.remove(base_paths, i)
