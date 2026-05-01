@@ -1,6 +1,12 @@
 local uv = vim.uv or vim.loop
 local islist = vim.islist or vim.tbl_islist
 
+---Replace deprecated api nvim_err_writeln
+---Ref: https://neovim.io/doc/user/deprecated/#_deprecated-in-0.11
+local function err_hint(msg)
+  vim.api.nvim_echo(msg, true, { err = true })
+end
+
 local function if_nil(val, was_nil, was_not_nil)
   if val == nil then
     return was_nil
@@ -178,7 +184,8 @@ function Job:_reset()
   self.is_shutdown = nil
 
   if self._shutdown_check and uv.is_active(self._shutdown_check) and not uv.is_closing(self._shutdown_check) then
-    vim.api.nvim_err_writeln(debug.traceback "We may be memory leaking here. Please report to TJ.")
+    -- vim.api.nvim_err_writeln(debug.traceback "We may be memory leaking here. Please report to TJ.")
+    err_hint(debug.traceback "We may be memory leaking here. Please report to TJ.")
   end
   self._shutdown_check = uv.new_check()
 
@@ -325,7 +332,7 @@ local on_output = function(self, result_key, cb)
 
           if found_newline then
             if not result_line then
-              return vim.api.nvim_err_writeln(
+              return err_hint(
                 "Broken data thing due to: " .. tostring(result_line) .. " " .. tostring(data)
               )
             end
@@ -482,7 +489,8 @@ function Job:wait(timeout, wait_interval, should_redraw)
   if self.handle == nil then
     local msg = vim.inspect(self)
     vim.schedule(function()
-      vim.api.nvim_err_writeln(msg)
+      err_hint(msg)
+      -- vim.api.nvim_err_writeln(msg)
     end)
 
     return
@@ -519,7 +527,8 @@ function Job:co_wait(wait_time)
   wait_time = wait_time or 5
 
   if self.handle == nil then
-    vim.api.nvim_err_writeln(vim.inspect(self))
+    err_hint(vim.inspect(self))
+    -- vim.api.nvim_err_writeln(vim.inspect(self))
     return
   end
 
